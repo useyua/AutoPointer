@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoPointer 日記</title>
+  <meta name="description" content="音声操作とAIポインターで操作する日記アプリ">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== AI Model Loading Overlay ===== -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="loading-icon">🤖</div>
+    <p class="loading-text" id="loading-text">AIモデルの準備中...</p>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progress-bar-fill"></div>
+    </div>
+    <p class="loading-detail" id="loading-detail">初回はモデルのダウンロードに時間がかかります</p>
+  </div>
+
+  <!-- ===== Virtual Pointer ===== -->
+  <div id="virtual-pointer"></div>
+
+  <!-- ===== Mic / Stop Button ===== -->
+  <button id="mic-stop-btn" class="mic-stop-btn" aria-label="マイクを起動">🎤</button>
+
+  <!-- ===== Task Queue ===== -->
+  <div id="task-queue" class="task-queue"></div>
+
+
+
+  <!-- =========================================================
+       Screen: HOME (カレンダー)
+       ========================================================= -->
+  <div id="screen-home" class="screen active">
+    <div class="screen-inner">
+      <header class="app-header">
+        <h1>📔 AutoPointer 日記</h1>
+        <p class="app-subtitle">日付をタップして日記を書きましょう</p>
+      </header>
+
+      <section class="home-card">
+        <div id="calendar-container"></div>
+      </section>
+
+      <!-- 最近の日記プレビュー -->
+      <section class="home-card recent-section">
+        <h2 class="section-title">📝 最近の日記</h2>
+        <div id="recent-entries">
+          <p class="empty-message">まだ日記がありません。日付を選んで書き始めましょう。</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       Screen: CHAT (日記チャット)
+       ========================================================= -->
+  <div id="screen-chat" class="screen">
+    <div class="screen-inner chat-layout">
+
+      <!-- Chat Header -->
+      <header class="chat-header">
+        <button id="btn-back" class="chat-back-btn" aria-label="ホームに戻る">← 戻る</button>
+        <h2 id="chat-date-title" class="chat-date-title">2026年5月12日</h2>
+      </header>
+
+      <!-- Chat Messages -->
+      <div id="chat-messages" class="chat-messages">
+        <p class="empty-message" id="chat-empty">この日の日記はまだありません。<br>下の入力欄から書き始めましょう。</p>
+      </div>
+
+      <!-- Chat Input -->
+      <div class="chat-input-area">
+        <input type="text" id="chat-input" class="app-input chat-input-field" placeholder="今日のできごとを入力..." autocomplete="off">
+        <button id="btn-send" class="app-btn accent chat-send-btn" aria-label="送信">送信</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== Scripts (ES Modules) ===== -->
+  <script type="module" src="js/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+# Data & Databases
+backend/data/diary.db
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs & System
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
