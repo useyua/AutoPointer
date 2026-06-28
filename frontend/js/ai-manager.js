@@ -57,8 +57,8 @@ export class AIManager {
    * @param {Function} callbacks.onStatus   - (status: string) => void
    */
   constructor({ onProgress, onStatus } = {}) {
-    this.#onProgress = onProgress || (() => {});
-    this.#onStatus   = onStatus   || (() => {});
+    this.#onProgress = onProgress || (() => { });
+    this.#onStatus = onStatus || (() => { });
   }
 
   /* ---------- 初期化 ---------- */
@@ -86,7 +86,7 @@ export class AIManager {
         this.#onStatus('モデルの読み込みがタイムアウトしました。');
         this.#worker?.terminate();
         resolve(false);
-      }, 5 * 60 * 1000);
+      }, 10 * 60 * 1000);
 
       this.#worker.onmessage = (e) => {
         const { type, data } = e.data;
@@ -148,7 +148,7 @@ export class AIManager {
   async processCommand(commandText, elementsText) {
     // 1. まず高速ルーターでパースを試みる
     const fastActions = this.#buildActionPlan(commandText, "");
-    
+
     // 入力や送信などの複雑な指示が含まれていない場合のみ、LLMをスキップして高速実行
     if (!commandText.includes('入力') && !commandText.includes('書いて') && !commandText.includes('打って') && !commandText.includes('送信')) {
       if (fastActions && fastActions.length > 0) {
@@ -183,7 +183,7 @@ export class AIManager {
 
     const extracted = this.#parseAction(rawResponse);
     if (!extracted) return null;
-    
+
     // 3. LLMの抽出結果を元にルーターがアクション配列を組み立てる
     console.log('[AI] LLM Extracted:', extracted);
     const plan = this.#buildActionPlan(extracted.commands, extracted.text);
@@ -197,16 +197,16 @@ export class AIManager {
 
     try {
       let jsonString = raw;
-      
+
       const objMatch = raw.match(/\{[\s\S]*/);
       if (objMatch) {
         jsonString = objMatch[0];
         const lastBrace = jsonString.lastIndexOf('}');
         if (lastBrace !== -1) {
-           jsonString = jsonString.substring(0, lastBrace + 1);
+          jsonString = jsonString.substring(0, lastBrace + 1);
         } else {
-           if (!jsonString.endsWith('"')) jsonString += '"';
-           jsonString += '}';
+          if (!jsonString.endsWith('"')) jsonString += '"';
+          jsonString += '}';
         }
       } else {
         return null;
@@ -230,17 +230,17 @@ export class AIManager {
     const cmd = commandsString.toLowerCase();
 
     // 1. カレンダー操作の判定
-    
+
     // --- Step 1: 年の抽出（独立して先に行う）---
     const thisYear = new Date().getFullYear();
     let targetYear = null;
 
     // 相対年表現
-    if (cmd.includes('再来年'))      targetYear = thisYear + 2;
-    else if (cmd.includes('来年'))   targetYear = thisYear + 1;
+    if (cmd.includes('再来年')) targetYear = thisYear + 2;
+    else if (cmd.includes('来年')) targetYear = thisYear + 1;
     else if (cmd.includes('おととし') || cmd.includes('一昨年')) targetYear = thisYear - 2;
     else if (cmd.includes('去年') || cmd.includes('昨年')) targetYear = thisYear - 1;
-    else if (cmd.includes('今年'))   targetYear = thisYear;
+    else if (cmd.includes('今年')) targetYear = thisYear;
     else {
       // 4桁数字 + 年 を直接指定
       const yearNumMatch = cmd.match(/(\d{4})年/);
@@ -268,7 +268,7 @@ export class AIManager {
     } else if (monthOnlyMatch) {
       targetMonth = parseInt(monthOnlyMatch[1], 10);
     }
-    
+
     // UI表示用に現在の月を取得しておく（null回避）
     let currentUIMonth = null;
     const titleEl = document.querySelector('.calendar-title');
@@ -281,17 +281,17 @@ export class AIManager {
     // 年・月の移動アクション（統合または個別）
     if (targetYear !== null) {
       // 年が指定されている場合は、月も含めて1つのアクションにする
-      actions.push({ 
-        action: 'flip_to_month', 
-        year: targetYear, 
-        month: targetMonth || currentUIMonth 
+      actions.push({
+        action: 'flip_to_month',
+        year: targetYear,
+        month: targetMonth || currentUIMonth
       });
     } else if (targetMonth !== null) {
       // 年指定がなく月だけの場合
-      actions.push({ 
-        action: 'flip_to_month', 
-        year: null, 
-        month: targetMonth 
+      actions.push({
+        action: 'flip_to_month',
+        year: null,
+        month: targetMonth
       });
     }
 
